@@ -24,9 +24,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/ladder-lessons.git"
+    "url": "https://github.com/sharichung/ladder-lessons.git"
   },
-  "homepage": "https://YOUR_USERNAME.github.io/ladder-lessons",
+  "homepage": "https://sharichung.github.io/ladder-lessons",
   "engines": {
     "node": ">=18.0.0"
   }
