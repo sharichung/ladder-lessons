@@ -11,7 +11,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: '/ladder-lessons/', // Correct base path for GitHub Pages
+  base: process.env.VITE_BASE_URL || '/', // Use environment variable for base path
   build: {
     outDir: 'dist',
     assetsDir: 'assets',

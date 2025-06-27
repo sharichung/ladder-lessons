@@ -31,7 +31,7 @@ jobs:
       - name: Build
         run: |
           cd frontend
-          pnpm run build
+          VITE_BASE_URL=/ladder-lessons/ pnpm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -39,4 +39,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: frontend/dist
           cname: # Add your custom domain here if you have one
+
 
