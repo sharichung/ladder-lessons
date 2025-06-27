@@ -11,7 +11,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: process.env.VITE_BASE_URL || '/', // Use environment variable for base path
+  base: './', // Use relative paths for GitHub Pages
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
