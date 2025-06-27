@@ -11,7 +11,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: './', // Use relative paths for GitHub Pages
+  base: '/ladder-lessons/', // Use absolute path for GitHub Pages subfolder
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
