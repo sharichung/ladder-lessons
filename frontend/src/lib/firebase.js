@@ -1,39 +1,32 @@
-// Firebase configuration and initialization
 import { initializeApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider, connectAuthEmulator } from 'firebase/auth'
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
 import { getStorage, connectStorageEmulator } from 'firebase/storage'
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions'
 
-// Firebase configuration
-// TODO: Replace with actual Firebase project configuration
 const firebaseConfig = {
-  apiKey: "demo-api-key",
-  authDomain: "ladder-lessons-demo.firebaseapp.com",
-  projectId: "ladder-lessons-demo",
-  storageBucket: "ladder-lessons-demo.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef123456"
+  apiKey: "AIzaSyA760A3u4jPGjq0verrZ1JpjYXnDJo4Ukg",
+  authDomain: "ladder-lessons.firebaseapp.com",
+  projectId: "ladder-lessons",
+  storageBucket: "ladder-lessons.firebasestorage.app",
+  messagingSenderId: "1012798746977",
+  appId: "1:1012798746977:web:b239f0713b9d29fab79520",
+  measurementId: "G-GNLLTFQEJF"
 }
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig)
 
-// Initialize Firebase services
 export const auth = getAuth(app)
 export const db = getFirestore(app)
 export const storage = getStorage(app)
 export const functions = getFunctions(app)
 
-// Configure Google Auth Provider
 export const googleProvider = new GoogleAuthProvider()
 googleProvider.addScope('email')
 googleProvider.addScope('profile')
 
-// For development: connect to Firebase emulators if running locally
 if (import.meta.env.DEV && typeof window !== 'undefined') {
   try {
-    // Only connect to emulators if not already connected
     if (!auth._delegate._config.emulator) {
       connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
     }
@@ -47,10 +40,10 @@ if (import.meta.env.DEV && typeof window !== 'undefined') {
       connectFunctionsEmulator(functions, 'localhost', 5001)
     }
   } catch (error) {
-    // Emulators already connected or not available
     console.log('Firebase emulators connection skipped:', error.message)
   }
 }
 
 export default app
+
 
