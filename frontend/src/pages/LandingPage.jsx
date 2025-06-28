@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { 
-  BookOpen, 
-  Users, 
-  Monitor, 
-  Volume2, 
-  Gamepad2, 
+import {
+  BookOpen,
+  Users,
+  Monitor,
+  Volume2,
+  Gamepad2,
   Star,
   Check,
   Play,
@@ -113,7 +113,7 @@ const LandingPage = () => {
   ]
 
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-orange-500 opacity-10"></div>
@@ -153,14 +153,14 @@ const LandingPage = () => {
       {/* Features Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <header className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
               Built for Modern Teachers
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Every feature designed with live online instruction in mind
             </p>
-          </div>
+          </header>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <Card key={index} className="text-center hover:shadow-lg transition-shadow border-2 hover:border-blue-200">
@@ -184,36 +184,36 @@ const LandingPage = () => {
       {/* How It Works Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-orange-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <header className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
               Simple 3-Step Process
             </h2>
             <p className="text-xl text-gray-600">
               Start teaching engaging phonics in minutes
             </p>
-          </div>
+          </header>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
+            <article className="text-center">
               <div className="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mx-auto mb-4">
                 1
               </div>
               <h3 className="text-xl font-semibold mb-2">Choose Your Group</h3>
               <p className="text-gray-600">Select from progressive phonics groups (s,a,t → p,i,n → etc.)</p>
-            </div>
-            <div className="text-center">
+            </article>
+            <article className="text-center">
               <div className="bg-orange-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mx-auto mb-4">
                 2
               </div>
               <h3 className="text-xl font-semibold mb-2">Share Your Screen</h3>
               <p className="text-gray-600">Open the lesson in your browser and share your screen on Zoom</p>
-            </div>
-            <div className="text-center">
+            </article>
+            <article className="text-center">
               <div className="bg-green-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mx-auto mb-4">
                 3
               </div>
               <h3 className="text-xl font-semibold mb-2">Teach & Engage</h3>
               <p className="text-gray-600">Control the games while students watch, learn, and participate verbally</p>
-            </div>
+            </article>
           </div>
         </div>
       </section>
@@ -221,7 +221,7 @@ const LandingPage = () => {
       {/* Testimonials Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <header className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
               Loved by Teachers Everywhere
             </h2>
@@ -231,7 +231,7 @@ const LandingPage = () => {
               ))}
               <span className="ml-2 text-lg font-semibold">4.9/5 from 500+ teachers</span>
             </div>
-          </div>
+          </header>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow">
@@ -265,14 +265,14 @@ const LandingPage = () => {
       {/* Pricing Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <header className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
               Simple, Transparent Pricing
             </h2>
             <p className="text-xl text-gray-600">
               Choose the plan that works for your teaching needs
             </p>
-          </div>
+          </header>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {pricingPlans.map((plan, index) => (
               <Card key={index} className={`relative hover:shadow-xl transition-all ${plan.popular ? 'border-2 border-blue-500 scale-105' : ''}`}>
@@ -341,9 +341,10 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   )
 }
 
 export default LandingPage
+
 
