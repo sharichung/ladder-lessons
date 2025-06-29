@@ -18,6 +18,7 @@ const SpellingGame = lazy(() => import("./pages/SpellingGame"));
 const PricingPage = lazy(() => import("./pages/PricingPage"));
 const SubscriptionPage = lazy(() => import("./pages/SubscriptionPage"));
 const TestPage = lazy(() => import("./TestPage"));
+const DemoPage = lazy(() => import("./pages/DemoPage"));
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,6 +45,7 @@ function App() {
                 <Route path="/pricing" element={<PricingPage />} />
                 <Route path="/subscription" element={<SubscriptionPage />} />
                 <Route path="/test" element={<TestPage />} />
+                <Route path="/demo" element={<DemoPage />} />
                 <Route
                   path="/dashboard"
                   element={
