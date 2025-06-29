@@ -11,11 +11,54 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: '/ladder-lessons/', // Use absolute path for GitHub Pages subfolder
+  base: '/ladder-lessons/', // GitHub Pages base path
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    // Enable chunk size optimization
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-firebase': [
+            'firebase/app',
+            'firebase/auth',
+            'firebase/firestore',
+            'firebase/functions',
+            'firebase/storage'
+          ],
+          'vendor-ui': [
+            '@radix-ui/react-accordion',
+            '@radix-ui/react-alert-dialog',
+            '@radix-ui/react-avatar',
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-navigation-menu'
+          ]
+        }
+      }
+    },
+    // Enable minification and optimization
+    minify: true,
+    sourcemap: true,
+  },
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'firebase/app',
+      'firebase/auth',
+      'firebase/firestore',
+      'firebase/functions',
+      'firebase/storage'
+    ]
+  },
+  // Add performance optimization
+  server: {
+    hmr: {
+      overlay: false
+    }
   }
 })
-
-

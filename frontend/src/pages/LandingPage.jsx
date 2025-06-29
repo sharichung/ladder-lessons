@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 
 const LandingPage = () => {
+  const navigate = useNavigate();
   const features = [
     {
       icon: <Monitor className="h-8 w-8 text-blue-500" />,
@@ -133,12 +134,14 @@ const LandingPage = () => {
             Perfect for screen sharing during live Zoom classes with zero student device requirements.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link to="/signup">
-              <Button size="lg" className="bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-600 hover:to-orange-600 text-lg px-8 py-3">
-                <Play className="h-5 w-5 mr-2" />
-                Start Teaching Today
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-600 hover:to-orange-600 text-lg px-8 py-3"
+              onClick={() => navigate('/login')}
+            >
+              <Play className="h-5 w-5 mr-2" />
+              Start Teaching Today
+            </Button>
             <Button variant="outline" size="lg" className="text-lg px-8 py-3">
               <Monitor className="h-5 w-5 mr-2" />
               Watch Demo

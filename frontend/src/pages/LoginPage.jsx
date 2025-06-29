@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { BookOpen, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
+import { Button } from '../components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
+import { Input } from '../components/ui/input'
+import { Label } from '../components/ui/label'
+import { Separator } from '../components/ui/separator'
+import { Alert, AlertDescription } from '../components/ui/alert'
+import { BookOpen, Mail, Lock, Eye, EyeOff, AlertCircle, WifiOff } from 'lucide-react'
 import { useAuth } from '../lib/AuthContext'
 
 const LoginPage = () => {
@@ -17,12 +17,27 @@ const LoginPage = () => {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [isOnline, setIsOnline] = useState(navigator.onLine)
 
   const { signin, signinWithGoogle } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
   const from = location.state?.from?.pathname || '/dashboard'
+
+  // Monitor online/offline status
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [])
 
   const handleInputChange = (e) => {
     setFormData({
@@ -34,6 +49,12 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    if (!isOnline) {
+      setError('You are currently offline. Please check your internet connection to sign in.')
+      return
+    }
+
     setIsLoading(true)
     setError('')
     
@@ -41,13 +62,30 @@ const LoginPage = () => {
       await signin(formData.email, formData.password)
       navigate(from, { replace: true })
     } catch (error) {
-      setError(error.message)
+      let errorMessage = 'An error occurred while signing in.'
+      
+      if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password. Please try again.'
+      } else if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email.'
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed attempts. Please try again later.'
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage = 'Network error. Please check your internet connection.'
+      }
+      
+      setError(errorMessage)
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleGoogleLogin = async () => {
+    if (!isOnline) {
+      setError('You are currently offline. Please check your internet connection to sign in with Google.')
+      return
+    }
+
     setIsLoading(true)
     setError('')
     
@@ -55,7 +93,15 @@ const LoginPage = () => {
       await signinWithGoogle()
       navigate(from, { replace: true })
     } catch (error) {
-      setError(error.message)
+      let errorMessage = 'An error occurred while signing in with Google.'
+      
+      if (error.code === 'auth/popup-closed-by-user') {
+        errorMessage = 'Sign in was cancelled. Please try again.'
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage = 'Network error. Please check your internet connection.'
+      }
+      
+      setError(errorMessage)
     } finally {
       setIsLoading(false)
     }
@@ -64,6 +110,16 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-orange-50">
       <div className="max-w-md w-full space-y-8">
+        {/* Offline Banner */}
+        {!isOnline && (
+          <Alert variant="warning" className="bg-yellow-50 border-yellow-200">
+            <WifiOff className="h-4 w-4 text-yellow-600" />
+            <AlertDescription className="text-yellow-700">
+              You are currently offline. Some features may be limited.
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Header */}
         <div className="text-center">
           <div className="flex justify-center">
@@ -100,7 +156,7 @@ const LoginPage = () => {
               variant="outline" 
               className="w-full" 
               onClick={handleGoogleLogin}
-              disabled={isLoading}
+              disabled={isLoading || !isOnline}
               type="button"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -193,7 +249,7 @@ const LoginPage = () => {
               <Button 
                 type="submit" 
                 className="w-full bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-600 hover:to-orange-600"
-                disabled={isLoading}
+                disabled={isLoading || !isOnline}
               >
                 {isLoading ? 'Signing in...' : 'Sign in'}
               </Button>
@@ -225,4 +281,3 @@ const LoginPage = () => {
 }
 
 export default LoginPage
-
