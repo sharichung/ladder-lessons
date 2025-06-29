@@ -1,0 +1,2 @@
+import{j as e}from"./vendor-ui-D7dHdldU.js";import"./vendor-react-XzQnUPj4.js";import"./vendor-firebase-B5aFpKjE.js";const a=()=>e.jsx("div",{className:"min-h-screen bg-blue-50 flex items-center justify-center",children:e.jsxs("div",{className:"text-center",children:[e.jsx("h1",{className:"text-4xl font-bold text-gray-900 mb-4",children:"Test Page"}),e.jsx("p",{className:"text-xl text-gray-600",children:"If you can see this, the app is working!"})]})});export{a as default};
+//# sourceMappingURL=TestPage-Bmqk5ZJx.js.map
