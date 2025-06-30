@@ -83,111 +83,63 @@
 
     <!-- Auth Forms -->
     <div id="auth-container" class="max-w-md mx-auto mt-10 px-4">
-        <!-- Login Form -->
-        <form id="login-form" class="auth-form bg-white shadow-md rounded-lg p-8" role="form" aria-labelledby="login-title">
-            <h2 id="login-title" class="text-2xl font-bold text-gray-900 mb-6">歡迎回來</h2>
+        <!-- Dynamic Auth Form -->
+        <form id="auth-form" class="auth-form bg-white shadow-md rounded-lg p-8" role="form" aria-labelledby="auth-title">
+            <h2 id="auth-title" class="text-2xl font-bold text-gray-900 mb-6">登入或註冊</h2>
             <div class="space-y-4">
-                <div>
-                    <label for="login-email" class="block text-sm font-medium text-gray-700">電子郵件</label>
+                <div id="name-field" style="display:none;">
+                    <label for="auth-name" class="block text-sm font-medium text-gray-700">姓名</label>
                     <input 
-                        id="login-email"
-                        type="email" 
-                        name="email"
-                        required 
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        autocomplete="email"
-                        aria-describedby="login-email-error"
-                    >
-                    <div id="login-email-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
-                </div>
-                <div>
-                    <label for="login-password" class="block text-sm font-medium text-gray-700">密碼</label>
-                    <input 
-                        id="login-password"
-                        type="password" 
-                        name="password"
-                        required 
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        autocomplete="current-password"
-                        aria-describedby="login-password-error"
-                    >
-                    <div id="login-password-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
-                </div>
-                <button 
-                    type="submit" 
-                    id="login-submit"
-                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center"
-                    aria-describedby="login-submit-status"
-                >
-                    <span id="login-text">登入</span>
-                    <div id="login-spinner" class="loading-spinner ml-2 hidden"></div>
-                </button>
-                <div id="login-submit-status" class="sr-only" aria-live="polite"></div>
-                <p class="text-sm text-gray-600 text-center">
-                    還沒有帳號？ 
-                    <button type="button" onclick="showAuth('signup')" class="text-blue-600 hover:text-blue-500">註冊</button>
-                </p>
-            </div>
-        </form>
-
-        <!-- Signup Form -->
-        <form id="signup-form" class="auth-form bg-white shadow-md rounded-lg p-8" role="form" aria-labelledby="signup-title">
-            <h2 id="signup-title" class="text-2xl font-bold text-gray-900 mb-6">建立帳號</h2>
-            <div class="space-y-4">
-                <div>
-                    <label for="signup-name" class="block text-sm font-medium text-gray-700">姓名</label>
-                    <input 
-                        id="signup-name"
+                        id="auth-name"
                         type="text" 
                         name="name"
-                        required 
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         autocomplete="name"
-                        aria-describedby="signup-name-error"
+                        aria-describedby="auth-name-error"
                     >
-                    <div id="signup-name-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
+                    <div id="auth-name-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
                 </div>
                 <div>
-                    <label for="signup-email" class="block text-sm font-medium text-gray-700">電子郵件</label>
+                    <label for="auth-email" class="block text-sm font-medium text-gray-700">電子郵件</label>
                     <input 
-                        id="signup-email"
+                        id="auth-email"
                         type="email" 
                         name="email"
                         required 
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         autocomplete="email"
-                        aria-describedby="signup-email-error"
+                        aria-describedby="auth-email-error"
                     >
-                    <div id="signup-email-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
+                    <div id="auth-email-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
                 </div>
                 <div>
-                    <label for="signup-password" class="block text-sm font-medium text-gray-700">密碼</label>
+                    <label for="auth-password" class="block text-sm font-medium text-gray-700">密碼</label>
                     <input 
-                        id="signup-password"
+                        id="auth-password"
                         type="password" 
                         name="password"
                         required 
                         minlength="6"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        autocomplete="new-password"
-                        aria-describedby="signup-password-error signup-password-help"
+                        autocomplete="current-password"
+                        aria-describedby="auth-password-error auth-password-help"
                     >
-                    <div id="signup-password-help" class="text-gray-500 text-sm mt-1">密碼至少需要 6 個字元</div>
-                    <div id="signup-password-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
+                    <div id="auth-password-help" class="text-gray-500 text-sm mt-1">密碼至少需要 6 個字元</div>
+                    <div id="auth-password-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
                 </div>
                 <button 
                     type="submit" 
-                    id="signup-submit"
+                    id="auth-submit"
                     class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center"
-                    aria-describedby="signup-submit-status"
+                    aria-describedby="auth-submit-status"
                 >
-                    <span id="signup-text">建立帳號</span>
-                    <div id="signup-spinner" class="loading-spinner ml-2 hidden"></div>
+                    <span id="auth-text">繼續</span>
+                    <div id="auth-spinner" class="loading-spinner ml-2 hidden"></div>
                 </button>
-                <div id="signup-submit-status" class="sr-only" aria-live="polite"></div>
-                <p class="text-sm text-gray-600 text-center">
-                    已有帳號？ 
-                    <button type="button" onclick="showAuth('login')" class="text-blue-600 hover:text-blue-500">登入</button>
+                <div id="auth-submit-status" class="sr-only" aria-live="polite"></div>
+                <p class="text-sm text-gray-600 text-center" id="auth-toggle-text">
+                    還沒有帳號？ 
+                    <button type="button" id="auth-toggle-btn" class="text-blue-600 hover:text-blue-500">註冊</button>
                 </p>
             </div>
         </form>
