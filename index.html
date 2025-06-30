@@ -1,127 +1,651 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ladder Lessons - Interactive Phonics for Teachers</title>
-    <meta
-      name="description"
-      content="Interactive Phonics Platform for Teachers - Perfect for Zoom Classes"
-    />
-    
-    <!-- Resource hints for faster loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://firebaseapp.com">
-    <link rel="preconnect" href="https://firebasestorage.googleapis.com">
-    
-    <!-- Modern font loading -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ladder Lessons - 互動式自然發音學習平台</title>
+    <meta name="description" content="專為教師設計的互動式自然發音教學平台，支援線上課程與學習進度追蹤">
+    <meta property="og:title" content="Ladder Lessons - 互動式自然發音學習">
+    <meta property="og:description" content="讓自然發音教學變得簡單有趣">
+    <meta property="og:type" content="website">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Meta tags for better SEO -->
-    <meta name="theme-color" content="#ffffff" />
-    <meta property="og:title" content="Ladder Lessons - Interactive Phonics for Teachers" />
-    <meta property="og:description" content="Interactive Phonics Platform for Teachers - Perfect for Zoom Classes" />
-    <meta property="og:type" content="website" />
-
-    <!-- Initial loading styles -->
     <style>
-      /* Modern loading spinner */
-      #initial-loader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: #ffffff;
-        z-index: 9999;
-        transition: opacity 0.3s ease-out;
-      }
-      #initial-loader.hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-      .spinner {
-        width: 40px;
-        height: 40px;
-        border: 3px solid #f3f3f3;
-        border-top: 3px solid #000000;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-bottom: 16px;
-      }
-      .loading-text {
-        font-family: 'Inter', sans-serif;
-        font-size: 14px;
-        color: #666;
-        margin-top: 8px;
-      }
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      /* Ensure smooth font loading */
-      body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-    </style>
-
-    <!-- GitHub Pages SPA support -->
-    <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      (function (l) {
-        if (l.search[1] === "/") {
-          var decoded = l.search
-            .slice(1)
-            .split("&")
-            .map(function (s) {
-              return s.replace(/~and~/g, "&");
-            })
-            .join("?");
-          window.history.replaceState(
-            null,
-            null,
-            l.pathname.slice(0, -1) + decoded + l.hash,
-          );
+        body {
+            font-family: 'Inter', sans-serif;
         }
-      })(window.location);
-    </script>
-    <script type="module" crossorigin src="/ladder-lessons/assets/index-Dg8NfHiD.js"></script>
-    <link rel="modulepreload" crossorigin href="/ladder-lessons/assets/vendor-react-XzQnUPj4.js">
-    <link rel="modulepreload" crossorigin href="/ladder-lessons/assets/vendor-firebase-B5aFpKjE.js">
-    <link rel="modulepreload" crossorigin href="/ladder-lessons/assets/vendor-ui-D7dHdldU.js">
-    <link rel="stylesheet" crossorigin href="/ladder-lessons/assets/index-DUz-bAE7.css">
-  </head>
-  <body>
-    <div id="root"></div>
-    
-    <!-- Initial loading indicator -->
-    <div id="initial-loader">
-      <div class="spinner"></div>
-      <div class="loading-text">Loading Ladder Lessons...</div>
+        .auth-form {
+            display: none;
+        }
+        .loading-spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.25rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .error-message {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #16a34a;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <span class="text-xl font-bold text-gray-900">Ladder Lessons</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-4" id="nav-buttons">
+                    <button onclick="showAuth('login')" class="nav-auth-btn text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" data-auth-type="login" aria-label="登入">Login</button>
+                    <button onclick="showAuth('signup')" class="nav-auth-btn bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700" data-auth-type="signup" aria-label="註冊">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Error/Success Messages -->
+    <div id="message-container" class="max-w-md mx-auto mt-4 px-4"></div>
+
+    <!-- Auth Forms -->
+    <div id="auth-container" class="max-w-md mx-auto mt-10 px-4">
+        <!-- Login Form -->
+        <form id="login-form" class="auth-form bg-white shadow-md rounded-lg p-8" role="form" aria-labelledby="login-title">
+            <h2 id="login-title" class="text-2xl font-bold text-gray-900 mb-6">歡迎回來</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="login-email" class="block text-sm font-medium text-gray-700">電子郵件</label>
+                    <input 
+                        id="login-email"
+                        type="email" 
+                        name="email"
+                        required 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        autocomplete="email"
+                        aria-describedby="login-email-error"
+                    >
+                    <div id="login-email-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
+                </div>
+                <div>
+                    <label for="login-password" class="block text-sm font-medium text-gray-700">密碼</label>
+                    <input 
+                        id="login-password"
+                        type="password" 
+                        name="password"
+                        required 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        autocomplete="current-password"
+                        aria-describedby="login-password-error"
+                    >
+                    <div id="login-password-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
+                </div>
+                <button 
+                    type="submit" 
+                    id="login-submit"
+                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center"
+                    aria-describedby="login-submit-status"
+                >
+                    <span id="login-text">登入</span>
+                    <div id="login-spinner" class="loading-spinner ml-2 hidden"></div>
+                </button>
+                <div id="login-submit-status" class="sr-only" aria-live="polite"></div>
+                <p class="text-sm text-gray-600 text-center">
+                    還沒有帳號？ 
+                    <button type="button" onclick="showAuth('signup')" class="text-blue-600 hover:text-blue-500">註冊</button>
+                </p>
+            </div>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="signup-form" class="auth-form bg-white shadow-md rounded-lg p-8" role="form" aria-labelledby="signup-title">
+            <h2 id="signup-title" class="text-2xl font-bold text-gray-900 mb-6">建立帳號</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="signup-name" class="block text-sm font-medium text-gray-700">姓名</label>
+                    <input 
+                        id="signup-name"
+                        type="text" 
+                        name="name"
+                        required 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        autocomplete="name"
+                        aria-describedby="signup-name-error"
+                    >
+                    <div id="signup-name-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
+                </div>
+                <div>
+                    <label for="signup-email" class="block text-sm font-medium text-gray-700">電子郵件</label>
+                    <input 
+                        id="signup-email"
+                        type="email" 
+                        name="email"
+                        required 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        autocomplete="email"
+                        aria-describedby="signup-email-error"
+                    >
+                    <div id="signup-email-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
+                </div>
+                <div>
+                    <label for="signup-password" class="block text-sm font-medium text-gray-700">密碼</label>
+                    <input 
+                        id="signup-password"
+                        type="password" 
+                        name="password"
+                        required 
+                        minlength="6"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        autocomplete="new-password"
+                        aria-describedby="signup-password-error signup-password-help"
+                    >
+                    <div id="signup-password-help" class="text-gray-500 text-sm mt-1">密碼至少需要 6 個字元</div>
+                    <div id="signup-password-error" class="text-red-600 text-sm mt-1 hidden" role="alert"></div>
+                </div>
+                <button 
+                    type="submit" 
+                    id="signup-submit"
+                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center"
+                    aria-describedby="signup-submit-status"
+                >
+                    <span id="signup-text">建立帳號</span>
+                    <div id="signup-spinner" class="loading-spinner ml-2 hidden"></div>
+                </button>
+                <div id="signup-submit-status" class="sr-only" aria-live="polite"></div>
+                <p class="text-sm text-gray-600 text-center">
+                    已有帳號？ 
+                    <button type="button" onclick="showAuth('login')" class="text-blue-600 hover:text-blue-500">登入</button>
+                </p>
+            </div>
+        </form>
     </div>
 
-    
-    <!-- Remove loader once app is ready -->
+    <!-- Game Container -->
+    <div id="game-container" class="game-container max-w-7xl mx-auto px-4 py-8" style="display: none;">
+        <div class="text-center mb-8">
+            <h1 id="group-title" class="text-3xl font-bold text-gray-900 mb-2">LadderLessons Phonics</h1>
+            <p id="group-description" class="text-xl text-gray-600">一起學習有趣的字母音素吧！選擇一組開始學習，或從第一組開始冒險！</p>
+        </div>
+
+        <!-- Progress Display -->
+        <div id="progress-display" class="bg-white rounded-lg shadow-md p-4 mb-8">
+            <h3 class="text-lg font-semibold mb-2">學習進度</h3>
+            <div class="flex items-center space-x-4">
+                <div class="flex-1">
+                    <div class="text-sm text-gray-600">今日練習</div>
+                    <div id="today-progress" class="text-2xl font-bold text-blue-600">0</div>
+                </div>
+                <div class="flex-1">
+                    <div class="text-sm text-gray-600">總完成數</div>
+                    <div id="total-progress" class="text-2xl font-bold text-green-600">0</div>
+                </div>
+                <div class="flex-1">
+                    <div class="text-sm text-gray-600">連續天數</div>
+                    <div id="streak-progress" class="text-2xl font-bold text-orange-600">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-center mb-8">
+            <button id="startAdventureBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700">
+                開始冒險
+            </button>
+        </div>
+
+        <div id="groupList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="content"></div>
+    </div>
+
+    <!-- 404 Error Page -->
+    <div id="error-404" class="max-w-md mx-auto mt-20 px-4 text-center" style="display: none;">
+        <div class="bg-white shadow-md rounded-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">頁面不存在</h2>
+            <p class="text-gray-600 mb-6">抱歉，您要找的頁面不存在。</p>
+            <button onclick="goToHome()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                回到首頁
+            </button>
+        </div>
+    </div>
+
     <script>
-      window.addEventListener('load', () => {
-        // Small delay to ensure smooth transition
-        setTimeout(() => {
-          const loader = document.getElementById('initial-loader');
-          if (loader) {
-            loader.classList.add('hidden');
-            // Remove from DOM after transition
-            setTimeout(() => loader.remove(), 300);
-          }
-        }, 100);
-      });
+        // Auth state management
+        let isAuthenticated = false;
+        let currentUser = null;
+
+        // Progress tracking
+        let userProgress = {
+            todayCount: 0,
+            totalCount: 0,
+            streak: 0,
+            lastActiveDate: null,
+            completedActivities: []
+        };
+
+        // Error handling
+        function showMessage(message, type = 'error') {
+            const container = document.getElementById('message-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+            messageDiv.textContent = message;
+            messageDiv.setAttribute('role', 'alert');
+            
+            container.innerHTML = '';
+            container.appendChild(messageDiv);
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, 5000);
+        }
+
+        function clearMessages() {
+            document.getElementById('message-container').innerHTML = '';
+        }
+
+        // Progress tracking functions
+        function loadProgress() {
+            const saved = localStorage.getItem('userProgress');
+            if (saved) {
+                userProgress = { ...userProgress, ...JSON.parse(saved) };
+            }
+            updateProgressDisplay();
+        }
+
+        function saveProgress() {
+            localStorage.setItem('userProgress', JSON.stringify(userProgress));
+            updateProgressDisplay();
+        }
+
+        function updateProgressDisplay() {
+            document.getElementById('today-progress').textContent = userProgress.todayCount;
+            document.getElementById('total-progress').textContent = userProgress.totalCount;
+            document.getElementById('streak-progress').textContent = userProgress.streak;
+        }
+
+        function trackActivity(activityType, activityId) {
+            const today = new Date().toDateString();
+            const activityKey = `${activityType}-${activityId}`;
+            
+            // Check if this is a new day
+            if (userProgress.lastActiveDate !== today) {
+                if (userProgress.lastActiveDate === new Date(Date.now() - 86400000).toDateString()) {
+                    // Yesterday, continue streak
+                    userProgress.streak += 1;
+                } else if (userProgress.lastActiveDate !== null) {
+                    // Missed days, reset streak
+                    userProgress.streak = 1;
+                } else {
+                    // First time
+                    userProgress.streak = 1;
+                }
+                userProgress.todayCount = 0;
+                userProgress.lastActiveDate = today;
+            }
+
+            // Track unique activities
+            if (!userProgress.completedActivities.includes(activityKey)) {
+                userProgress.completedActivities.push(activityKey);
+                userProgress.todayCount += 1;
+                userProgress.totalCount += 1;
+                saveProgress();
+                
+                // Show achievement message
+                if (userProgress.todayCount === 1) {
+                    showMessage('太棒了！今天第一個完成的活動！', 'success');
+                } else if (userProgress.todayCount % 5 === 0) {
+                    showMessage(`厲害！今天已完成 ${userProgress.todayCount} 個活動！`, 'success');
+                }
+            }
+        }
+
+        // Route protection
+        function requireAuth() {
+            if (!isAuthenticated) {
+                showMessage('請先登入才能使用此功能');
+                showAuth('login');
+                return false;
+            }
+            return true;
+        }
+
+        // Initialize state
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check authentication
+            if (localStorage.getItem('isAuthenticated') === 'true') {
+                isAuthenticated = true;
+                currentUser = {
+                    email: localStorage.getItem('userEmail'),
+                    name: localStorage.getItem('userName')
+                };
+                loadProgress();
+                showGame();
+            } else {
+                showAuth('login');
+            }
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', handleKeyboardNavigation);
+        });
+
+        function handleKeyboardNavigation(e) {
+            // ESC to close messages
+            if (e.key === 'Escape') {
+                clearMessages();
+            }
+        }
+
+        // Enhanced auth functions
+        function showAuth(type) {
+            clearMessages();
+            document.getElementById('game-container').style.display = 'none';
+            document.getElementById('error-404').style.display = 'none';
+            
+            const authContainer = document.getElementById('auth-container');
+            authContainer.style.display = 'block';
+            
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.style.display = 'none';
+            });
+            
+            document.getElementById(`${type}-form`).style.display = 'block';
+            
+            // Update nav buttons
+            document.querySelectorAll('.nav-auth-btn').forEach(btn => {
+                const isActive = btn.getAttribute('data-auth-type') === type;
+                btn.classList.toggle('bg-blue-600', isActive);
+                btn.classList.toggle('text-white', isActive);
+                btn.classList.toggle('text-gray-600', !isActive);
+            });
+
+            // Focus first input
+            setTimeout(() => {
+                const firstInput = document.querySelector(`#${type}-form input`);
+                if (firstInput) firstInput.focus();
+            }, 100);
+        }
+
+        function setLoading(formType, isLoading) {
+            const submitBtn = document.getElementById(`${formType}-submit`);
+            const text = document.getElementById(`${formType}-text`);
+            const spinner = document.getElementById(`${formType}-spinner`);
+            const status = document.getElementById(`${formType}-submit-status`);
+            
+            submitBtn.disabled = isLoading;
+            text.textContent = isLoading ? '處理中...' : (formType === 'login' ? '登入' : '建立帳號');
+            spinner.classList.toggle('hidden', !isLoading);
+            status.textContent = isLoading ? '正在處理您的請求' : '';
+        }
+
+        // Enhanced form validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validateForm(formData, formType) {
+            const errors = {};
+            
+            if (formType === 'signup' && !formData.get('name').trim()) {
+                errors.name = '請輸入姓名';
+            }
+            
+            const email = formData.get('email');
+            if (!email) {
+                errors.email = '請輸入電子郵件';
+            } else if (!validateEmail(email)) {
+                errors.email = '請輸入有效的電子郵件格式';
+            }
+            
+            const password = formData.get('password');
+            if (!password) {
+                errors.password = '請輸入密碼';
+            } else if (formType === 'signup' && password.length < 6) {
+                errors.password = '密碼至少需要 6 個字元';
+            }
+            
+            return errors;
+        }
+
+        function displayFieldErrors(errors, formType) {
+            // Clear previous errors
+            Object.keys(errors).forEach(field => {
+                const errorDiv = document.getElementById(`${formType}-${field}-error`);
+                const input = document.getElementById(`${formType}-${field}`);
+                if (errorDiv && input) {
+                    if (errors[field]) {
+                        errorDiv.textContent = errors[field];
+                        errorDiv.classList.remove('hidden');
+                        input.classList.add('border-red-500');
+                        input.setAttribute('aria-invalid', 'true');
+                    } else {
+                        errorDiv.classList.add('hidden');
+                        input.classList.remove('border-red-500');
+                        input.removeAttribute('aria-invalid');
+                    }
+                }
+            });
+        }
+
+        // Handle form submissions
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearMessages();
+            
+            const formData = new FormData(e.target);
+            const errors = validateForm(formData, 'login');
+            
+            displayFieldErrors(errors, 'login');
+            
+            if (Object.keys(errors).length > 0) {
+                return;
+            }
+            
+            setLoading('login', true);
+            
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const email = formData.get('email');
+                
+                // Check if user exists (simulate)
+                const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                const user = existingUsers.find(u => u.email === email);
+                
+                if (!user) {
+                    throw new Error('帳號不存在，請先註冊');
+                }
+                
+                // Simulate login success
+                isAuthenticated = true;
+                currentUser = user;
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userName', user.name);
+                
+                loadProgress();
+                showGame();
+                showMessage('登入成功！', 'success');
+                
+                // Track login event
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'login', {
+                        method: 'email'
+                    });
+                }
+                
+            } catch (error) {
+                showMessage(error.message || '登入失敗，請檢查您的資訊');
+            } finally {
+                setLoading('login', false);
+            }
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearMessages();
+            
+            const formData = new FormData(e.target);
+            const errors = validateForm(formData, 'signup');
+            
+            displayFieldErrors(errors, 'signup');
+            
+            if (Object.keys(errors).length > 0) {
+                return;
+            }
+            
+            setLoading('signup', true);
+            
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                const email = formData.get('email');
+                const name = formData.get('name');
+                
+                // Check if user already exists
+                const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                if (existingUsers.find(u => u.email === email)) {
+                    throw new Error('此電子郵件已被註冊');
+                }
+                
+                // Save new user
+                const newUser = { email, name, registeredAt: new Date().toISOString() };
+                existingUsers.push(newUser);
+                localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+                
+                // Auto login
+                isAuthenticated = true;
+                currentUser = newUser;
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userName', name);
+                
+                loadProgress();
+                showGame();
+                showMessage('註冊成功！歡迎加入 Ladder Lessons！', 'success');
+                
+                // Track signup event
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'sign_up', {
+                        method: 'email'
+                    });
+                }
+                
+            } catch (error) {
+                showMessage(error.message || '註冊失敗，請稍後再試');
+            } finally {
+                setLoading('signup', false);
+            }
+        });
+
+        // Show game after authentication
+        function showGame() {
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('error-404').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            
+            const userEmail = localStorage.getItem('userEmail');
+            document.getElementById('nav-buttons').innerHTML = `
+                <span class="text-gray-600 mr-4">${userEmail}</span>
+                <button onclick="logout()" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" aria-label="登出">
+                    登出
+                </button>
+            `;
+
+            renderGroupButtons();
+        }
+
+        // Enhanced logout
+        function logout() {
+            isAuthenticated = false;
+            currentUser = null;
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            
+            showAuth('login');
+            document.getElementById('nav-buttons').innerHTML = `
+                <button onclick="showAuth('login')" class="nav-auth-btn text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" data-auth-type="login" aria-label="登入">Login</button>
+                <button onclick="showAuth('signup')" class="nav-auth-btn bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700" data-auth-type="signup" aria-label="註冊">Sign Up</button>
+            `;
+            
+            document.getElementById('login-form').reset();
+            document.getElementById('signup-form').reset();
+            showMessage('已成功登出', 'success');
+        }
+
+        function goToHome() {
+            if (isAuthenticated) {
+                showGame();
+            } else {
+                showAuth('login');
+            }
+        }
+
+        function show404() {
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('game-container').style.display = 'none';
+            document.getElementById('error-404').style.display = 'block';
+        }
+
+        // Enhanced renderGroupButtons function will be added by app.js
+        function renderGroupButtons() {
+            // This will be implemented in app.js
+            console.log('renderGroupButtons called - will be implemented by app.js');
+        }
+
+        // Load the game script
+        const script = document.createElement('script');
+        script.src = 'app.js';
+        script.onerror = () => {
+            showMessage('載入遊戲資源失敗，請重新整理頁面');
+        };
+        document.body.appendChild(script);
     </script>
-  </body>
+
+    <!-- Google Analytics (replace with your tracking ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_TRACKING_ID');
+    </script>
+</body>
 </html>
