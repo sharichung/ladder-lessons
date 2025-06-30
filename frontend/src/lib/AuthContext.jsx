@@ -131,7 +131,8 @@ export const AuthProvider = ({ children }) => {
     
     try {
       setError(null)
-      const { user } = await signInWithPopup(
+      // Use popup sign in
+      const { user, credential } = await signInWithPopup(
         services.auth, 
         services.googleProvider,
         browserPopupRedirectResolver
@@ -145,6 +146,16 @@ export const AuthProvider = ({ children }) => {
           email: user.email,
           school: ''
         })
+      }
+      
+      // Check if email is linked with other sign-in methods
+      const methods = await services.auth.fetchSignInMethodsForEmail(user.email)
+      if (methods.length > 1) {
+        // User has multiple sign-in methods, link accounts if needed
+        if (!methods.includes('google.com')) {
+          // Link Google credential to existing account
+          await user.linkWithCredential(credential)
+        }
       }
       
       return user
