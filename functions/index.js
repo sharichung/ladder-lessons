@@ -1,7 +1,0 @@
-// functions/index.js
-
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-admin.initializeApp();
-
-exports.createCheckoutSession = require("./stripe/createCheckoutSession");
