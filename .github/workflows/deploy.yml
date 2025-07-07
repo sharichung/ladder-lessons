@@ -28,3 +28,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          user_name: sharichung
+          user_email: sharichung@users.noreply.github.com
